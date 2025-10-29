@@ -1,2 +1,5 @@
 *.o
 mdriver
+.DS_Store
+.devcontainer
+.vscode
