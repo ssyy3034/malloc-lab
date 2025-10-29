@@ -50,12 +50,38 @@ int mm_init(void)
     return 0;
 }
 
+
 /*
  * mm_malloc - Allocate a block by incrementing the brk pointer.
  *     Always allocate a block whose size is a multiple of the alignment.
  */
-void *mm_malloc(size_t size)
+
+
+
+static void *find_fit(size_t asize)
 {
+    int THRESHOLD = 16;
+    void *bp;
+    void *fallback_fit = NULL; // 만약 Good Fit이 없을 경우를 대비한 First Fit 후보
+    // heap리스트의 처음부터 next bp씩, 헤더가 0이면 마지막 block
+    for (bp = free_listp; bp != NULL; bp = SUCC(bp)){ //bp = heap_listp부터, get_size해서 헤더 확인하고 0이 아니면(0이면 에필로그) bp는 다음 bp
+        if (asize <= GET_SIZE(HDRP(bp))){ 
+            if ((GET_SIZE(HDRP(bp)) - asize) <= THRESHOLD) {
+                return bp; // Good Fit
+            }
+                if (fallback_fit == NULL) {
+                    fallback_fit = bp;
+            }
+        }
+        }
+    return fallback_fit;
+
+    }
+
+
+
+void *mm_malloc(size_t size)
+   {
     int newsize = ALIGN(size + SIZE_T_SIZE);
     void *p = mem_sbrk(newsize);
     if (p == (void *)-1)
