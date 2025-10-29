@@ -3,13 +3,14 @@
 #
 TEAM = bovik
 VERSION = 1
-HANDINDIR = /afs/cs.cmu.edu/academic/class/15213-f01/malloclab/handin
+HANDINDIR = /afs/cs/academic/class/15213-f01/malloclab/handin
 
 CC = gcc
 # CFLAGS = -Wall -O2 -m32
 CFLAGS = -Wall -O2 -g
 
-OBJS = mdriver.o mm.o memlib.o fsecs.o fcyc.o clock.o ftimer.o
+# clock.o 를 여기에 추가했습니다!
+OBJS = mdriver.o mm.o memlib.o fsecs.o fcyc.o ftimer.o clock.o
 
 mdriver: $(OBJS)
 	$(CC) $(CFLAGS) -o mdriver $(OBJS)
@@ -22,10 +23,11 @@ fcyc.o: fcyc.c fcyc.h
 ftimer.o: ftimer.c ftimer.h config.h
 clock.o: clock.c clock.h
 
+run: clean mdriver
+	./mdriver -V
+
 handin:
 	cp mm.c $(HANDINDIR)/$(TEAM)-$(VERSION)-mm.c
 
 clean:
 	rm -f *~ *.o mdriver
-
-
